@@ -15,7 +15,8 @@ public:
 	Network(Layer** layers, unsigned long layerCount, double learningRate, unsigned short batchSize, float momentum, bool init = false);
 
 	double* predict(double* inputs, unsigned long length);
-	double* train(double* inputs, unsigned long inputLength, double* output, unsigned long outputLength);
+	void train(double* inputs, unsigned long inputLength, double* output, unsigned long outputLength);
+
 	void printLastResult();
 };
 
