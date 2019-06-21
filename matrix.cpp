@@ -28,6 +28,15 @@ Matrix::Matrix(unsigned long rows, unsigned long cols, double **data) {
 	this->data = ArrayHelper::getArray(rows, cols);
 }
 
+Matrix::~Matrix()
+{
+	for (int i = 0; i < rows; ++i)
+	{
+		delete[] data[i];
+	}
+	delete[] data;
+}
+
 
 Matrix* Matrix::random() {
 	for (unsigned long i = 0; i < rows; i++) {

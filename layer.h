@@ -1,8 +1,7 @@
 #ifndef layer_h
 #define layer_h
 #include "activation/functions.h"
-
-class Matrix;
+#include "matrix.h"
 
 
 class Layer {
@@ -20,8 +19,9 @@ public:
 	Activation func;
 
 	unsigned long nodeCount;
-	 
+
 	Layer(unsigned long nodeCount,  Activation func);
+	~Layer();
 
 };
 

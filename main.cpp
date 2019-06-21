@@ -10,12 +10,13 @@ int main()
 {
 
 	const int layercount = 4;
-	Layer* layers[layercount] = { 
+	Layer* layers[4] = {
 		new Layer(2, SIGMOID),
-		new Layer(4, SIGMOID),
+		new Layer(3, SIGMOID),
 		new Layer(4, SIGMOID),
 		new Layer(1, SIGMOID)
 	};
+
 
 	Network* net = new Network(layers, layercount, 0.01, 20, 0.75);
 	double input1[2] = { 0, 0 };
@@ -44,6 +45,8 @@ int main()
 	}
 	net->predict(input2, 2);
 	net->printLastResult();
+
+	delete net;
 
 	std::cin.get();
 	return 0;

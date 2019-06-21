@@ -23,6 +23,15 @@ Network::Network(Layer** layers, unsigned long layerCount, double learningRate, 
 	}
 }
 
+Network::~Network()
+{
+	for (int i = 0; i < layerCount; ++i)
+	{
+		delete layers[i];
+	}
+	delete[] layers	;
+}
+
 double* Network::predict(double* inputs, unsigned long length)
 {
 	if (length != layers[0]->nodeCount) { return nullptr; }

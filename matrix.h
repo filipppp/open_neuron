@@ -1,6 +1,6 @@
 #ifndef matrix_h
 #define matrix_h
-#include "layer.h"
+#include "activation/functions.h"
 
 class Matrix {
 	public:
@@ -10,6 +10,7 @@ class Matrix {
 
 		Matrix(unsigned long rows, unsigned long cols, bool init = false);
 		Matrix(unsigned long rows, unsigned long cols, double** data);
+		~Matrix();
 
 		Matrix* random();
 		Matrix* add(Matrix* input);
