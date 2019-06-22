@@ -2,42 +2,37 @@
 #include "../matrix.h"
 #include <iostream>
 
-double** ArrayHelper::getArray(unsigned long rows, unsigned long cols, bool zero) {
-	double** array = new double*[rows];
+double* ArrayHelper::getArray(size_t rows, size_t cols, bool zero) {
+	double* array = new double[rows*cols];
 	if (zero) {
-		for (unsigned long i = 0; i < rows; i++) {
-			array[i] = new double[cols];
-			for (unsigned long j = 0; j < cols; j++) {
-				array[i][j] = 0;
+		for (size_t i = 0; i < rows; i++) {
+			for (size_t j = 0; j < cols; j++) {
+				array[i * cols + j] = 0;
 			}
 		}
-	} else {
-		for (unsigned long i = 0; i < rows; i++) {
-			array[i] = new double[cols];
-		}
-	}
+	} 
 	return array;
 }
 
-double* ArrayHelper::getZero1D(unsigned long length) {
+double* ArrayHelper::getZero1D(size_t length) {
 	double* arr = new double[length];
-	for (unsigned long i = 0; i < length; i++) {
+	for (size_t i = 0; i < length; i++) {
 		arr[i] = 0;
 	}
 	return arr;
 }
 
-double* ArrayHelper::subtractArrays(const double* arr1, const double* arr2, unsigned long size) 
+double* ArrayHelper::subtractArrays(const double* arr1, const double* arr2, size_t size) 
 {
 	double* result = new double[size];
-	for (unsigned long i = 0; i < size; ++i)
+	for (size_t i = 0; i < size; ++i)
 	{
 		result[i] = arr1[i] - arr2[i];
 	}
 	return result;
 }
 
-double* ArrayHelper::mapTo(double* arr, unsigned long size, Activation func, bool derivative)
+double* ArrayHelper::mapTo(double* arr, size_t size, Activation func, bool derivative)
 {
 	if (func == SOFTMAX)
 	{
@@ -45,7 +40,7 @@ double* ArrayHelper::mapTo(double* arr, unsigned long size, Activation func, boo
 	}
 
 	double* output = new double[size];
-	for (unsigned long i = 0; i < size; ++i)
+	for (size_t i = 0; i < size; ++i)
 	{
 		output[i] = Functions::getValue(arr[i], func, derivative);
 	}
@@ -55,45 +50,45 @@ double* ArrayHelper::mapTo(double* arr, unsigned long size, Activation func, boo
 double* ArrayHelper::matrixTo1DArray(Matrix* m1)
 {
 	double* output = new double[m1->rows];
-	for (unsigned long i = 0; i < m1->rows; ++i)
+	for (size_t i = 0; i < m1->rows; ++i)
 	{
-		output[i] = m1->data[i][0];
+		output[i] = m1->data[i * m1->cols];
 	}
 	return output;
 }
 
-double* ArrayHelper::multiply(double* x, double multiplier, unsigned long size)
+double* ArrayHelper::multiply(double* x, double multiplier, size_t size)
 {
 	double* output = new double[size];
-	for (unsigned long i = 0; i < size; i++)
+	for (size_t i = 0; i < size; i++)
 	{
 		output[i] = x[i] * multiplier;
 	}
 	return output;
 }
 
-void ArrayHelper::add(double* x1, double* x2, unsigned long size)
+void ArrayHelper::add(double* x1, double* x2, size_t size)
 {
-	for (unsigned long i = 0; i < size; i++)
+	for (size_t i = 0; i < size; i++)
 	{
 		x1[i] += x2[i];
 	}
 }
 
-double* ArrayHelper::hadamardArray(double* x1, double* x2, unsigned long size)
+double* ArrayHelper::hadamardArray(double* x1, double* x2, size_t size)
 {
 	double* output = new double[size];
-	for (unsigned long i = 0; i < size; i++)
+	for (size_t i = 0; i < size; i++)
 	{
 		output[i] = x1[i] * x2[i];
 	}
 	return output;
 }
 
-double ArrayHelper::maxNumber(const double* arr, unsigned long length)
+double ArrayHelper::maxNumber(const double* arr, size_t length)
 {
 	double max = arr[0];
-	for (unsigned long i = 1; i < length; i++)
+	for (size_t i = 1; i < length; i++)
 	{
 		if (arr[i] > max)
 		{

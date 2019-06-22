@@ -18,9 +18,9 @@ public:
 
 	Activation func;
 
-	unsigned long nodeCount;
+	size_t nodeCount;
 
-	Layer(unsigned long nodeCount,  Activation func);
+	Layer(size_t nodeCount,  Activation func);
 	~Layer();
 
 };

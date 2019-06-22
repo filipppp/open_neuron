@@ -4,7 +4,7 @@
 #include "../../../../../../Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Tools/MSVC/14.21.27702/include/cstdlib"
 #include <iostream>
 
-Layer::Layer(unsigned long nodeCount, Activation func) {
+Layer::Layer(size_t nodeCount, Activation func) {
 	neurons = ArrayHelper::getZero1D(nodeCount);
 	biases = ArrayHelper::getZero1D(nodeCount);
 	deltaBiasSum = ArrayHelper::getZero1D(nodeCount);

@@ -59,7 +59,7 @@ void nnTest() {
 		}
 	}
 	net->predict(input3, 2);
-	//net->printLastResult();
+	net->printLastResult();
 
 	delete net;
 }

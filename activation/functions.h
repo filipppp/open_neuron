@@ -22,11 +22,11 @@ public:
 	static double tanh(double x);
 	static double derivativeTanh(double x);
 
-	static double* softmax(double* arr, unsigned long size);
-	static double* derivativeSoftmax(double* arr, unsigned long size);
+	static double* softmax(double* arr, size_t size);
+	static double* derivativeSoftmax(double* arr, size_t size);
 
 	static double getValue(double x, Activation func, bool derivative = false);
-	static double* getMultiValue(double* arr, unsigned long size, Activation func, bool derivative = false);
+	static double* getMultiValue(double* arr, size_t size, Activation func, bool derivative = false);
 };
 
 #endif

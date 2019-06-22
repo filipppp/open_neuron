@@ -59,7 +59,7 @@ double Functions::derivativeTanh(double x)
 
 /* Multi Parameter Functions */
 
-double* Functions::softmax(double* arr, unsigned long size)
+double* Functions::softmax(double* arr, size_t size)
 {
 	double* outputs = new double[size];
 	double sum = 0;
@@ -76,7 +76,7 @@ double* Functions::softmax(double* arr, unsigned long size)
 	return outputs;
 }
 
-double* Functions::derivativeSoftmax(double* arr, unsigned long size)
+double* Functions::derivativeSoftmax(double* arr, size_t size)
 {
 	/* iwann mal */
 	return nullptr;
@@ -101,7 +101,7 @@ double Functions::getValue(double x, Activation func, bool derivative)
 	}
 }
 
-double* Functions::getMultiValue(double* arr, unsigned long size, Activation func, bool derivative)
+double* Functions::getMultiValue(double* arr, size_t size, Activation func, bool derivative)
 {
 	switch (func)
 	{

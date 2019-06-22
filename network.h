@@ -7,16 +7,16 @@ class Network {
 public:
 	Layer** layers;
 	double learningRate;
-	double batchSize;
+	unsigned short batchSize;
 	double momentum;
-	unsigned long layerCount;
-	unsigned long batchTrained = 0;
+	size_t layerCount;
+	unsigned short batchTrained = 0;
 
-	Network(Layer** layers, unsigned long layerCount, double learningRate, unsigned short batchSize, float momentum, bool init = false);
+	Network(Layer** layers, size_t layerCount, double learningRate, unsigned short batchSize, float momentum, bool init = false);
 	~Network();
 
-	double* predict(double* inputs, unsigned long length);
-	void train(double* inputs, unsigned long inputLength, double* output, unsigned long outputLength);
+	double* predict(double* inputs, size_t length);
+	void train(double* inputs, size_t inputLength, double* output, size_t outputLength);
 
 	void printLastResult();
 };
