@@ -29,7 +29,7 @@ Network::~Network()
 	{
 		delete layers[i];
 	}
-	delete[] layers	;
+	// delete[] layers;
 }
 
 double* Network::predict(double* inputs, unsigned long length)
@@ -37,7 +37,10 @@ double* Network::predict(double* inputs, unsigned long length)
 	if (length != layers[0]->nodeCount) { return nullptr; }
 
 	/* Set the input layer neurons to the passed inputs */
-	layers[0]->neurons = inputs;
+	for (size_t i = 0; i < length; ++i)
+	{
+		layers[0]->neurons[i] = inputs[i];
+	}
 
 	/* Feed forward algorithm */
 	for (unsigned long i = 1; i < layerCount; i++) {
@@ -46,11 +49,13 @@ double* Network::predict(double* inputs, unsigned long length)
 		 * 2. add() bias to calclulated neurons
 		 * 3. apply() Activation Function to squeeze numbers to specific regions
 		 */
-		layers[i]->neurons = Matrix::multiply(layers[i]->weights, layers[i - 1]->neurons, layers[i-1]->nodeCount)
-			->add(layers[i]->biases, layers[i]->nodeCount)
-			->apply(layers[i]->func);
-	}
+		delete[] layers[i]->neurons;
+		Matrix* unmappedMatrix = Matrix::multiply(layers[i]->weights, layers[i - 1]->neurons, layers[i - 1]->nodeCount)
+			->add(layers[i]->biases, layers[i]->nodeCount);
+		layers[i]->neurons = unmappedMatrix->apply(layers[i]->func);
 
+		delete unmappedMatrix;
+	}
 
 	/* Return predicted output which are just the last neurons */
 	return layers[layerCount - 1]->neurons;
@@ -71,6 +76,7 @@ void Network::train(double* input, unsigned long inputLength, double* targetOutp
 	double* predictedOutput = predict(input, inputLength);
 	double* outputError = ArrayHelper::subtractArrays(targetOutput, predictedOutput, targetOutputLength);
 
+
 	double** errorMatrices = new double*[layerCount];
 	errorMatrices[layerCount - 1] = outputError;
 
@@ -78,13 +84,31 @@ void Network::train(double* input, unsigned long inputLength, double* targetOutp
 	for (unsigned long i = layerCount - 1; i > 0; i--)
 	{
 		double* neuronsDerivative = ArrayHelper::mapTo(layers[i]->neurons, layers[i]->nodeCount, layers[i]->func, true);
-		double* gradient = ArrayHelper::multiply(ArrayHelper::hadamardArray(neuronsDerivative, errorMatrices[i], layers[i]->nodeCount), learningRate, layers[i]->nodeCount);
-		
-		Matrix* deltaWeights = Matrix::multiply(gradient, layers[i]->nodeCount, layers[i - 1]->neurons, layers[i - 1]->nodeCount);
 
+		double* errorMultNeurons = ArrayHelper::hadamardArray(neuronsDerivative, errorMatrices[i], layers[i]->nodeCount);
+		double* gradient = ArrayHelper::multiply(errorMultNeurons, learningRate, layers[i]->nodeCount);
+
+		delete[] neuronsDerivative;
+		delete[] errorMultNeurons;
+
+		Matrix* deltaWeights = Matrix::multiply(gradient, layers[i]->nodeCount, layers[i - 1]->neurons, layers[i - 1]->nodeCount);
 		layers[i]->weights->add(deltaWeights);
+		delete deltaWeights;
+
 		ArrayHelper::add(layers[i]->biases, gradient, layers[i]->nodeCount);
 
-		errorMatrices[i - 1] = Matrix::multiply(Matrix::transpose(layers[i]->weights), errorMatrices[i], layers[i]->nodeCount)->to1d();
+		delete[] gradient;
+
+		Matrix* weightsTransposed = Matrix::transpose(layers[i]->weights);
+		Matrix* errorMatrix = Matrix::multiply(weightsTransposed, errorMatrices[i], layers[i]->nodeCount);
+		errorMatrices[i - 1] = errorMatrix->to1d();
+		delete weightsTransposed;
+		delete errorMatrix;
 	}
+
+	for (size_t i = 0; i < layerCount; ++i)
+	{
+		delete[] errorMatrices[i];
+ 	}
+	delete[] errorMatrices;
 }

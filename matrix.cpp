@@ -30,7 +30,7 @@ Matrix::Matrix(unsigned long rows, unsigned long cols, double **data) {
 
 Matrix::~Matrix()
 {
-	for (int i = 0; i < rows; ++i)
+	for (size_t i = 0; i < rows; ++i)
 	{
 		delete[] data[i];
 	}
@@ -75,7 +75,9 @@ double* Matrix::apply(Activation func) {
 	}
 
 	double* oneDimArray = ArrayHelper::matrixTo1DArray(this);
-	return ArrayHelper::mapTo(oneDimArray, rows, func);
+	double* output = ArrayHelper::mapTo(oneDimArray, rows, func);
+	delete oneDimArray;
+	return output;
 }
 
 double* Matrix::to1d()
@@ -139,7 +141,7 @@ Matrix* Matrix::multiply(double* x1, unsigned long x1Length, double* x2, unsigne
 	for (unsigned long i = 0; i < x1Length; i++) {
 		for (unsigned long j = 0; j < x2Length; j++) {
 			double sum = 0;
-			for (int k = 0; k < x2Length; ++k)
+			for (size_t k = 0; k < x2Length; ++k)
 			{
 				sum += x1[i] * x2[k];
 			}

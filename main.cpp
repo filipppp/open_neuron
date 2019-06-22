@@ -4,11 +4,25 @@
 #include "main.h"
 #include "network.h"
 #include "layer.h"
+#include "../../../../../../Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Tools/MSVC/14.21.27702/include/chrono"
+typedef long long int64; typedef unsigned long long uint64;
 
+
+void nnTest();
 
 int main()
 {
+	auto t1 = std::chrono::high_resolution_clock::now();
+	nnTest();
+	auto t2 = std::chrono::high_resolution_clock::now();
 
+	auto executionTime = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
+	std::cout << executionTime;
+	std::cin.get();
+	return 0;
+}
+
+void nnTest() {
 	const int layercount = 4;
 	Layer* layers[4] = {
 		new Layer(2, SIGMOID),
@@ -28,8 +42,9 @@ int main()
 	double output2[1] = { 1.0 };
 	double output3[1] = { 1.0 };
 	double output4[1] = { 0 };
+
 	for (unsigned long i = 0; i < 200000; i++) {
-		double random = (double) std::rand() / RAND_MAX;
+		double random = (double)std::rand() / RAND_MAX;
 		if (random < 0.25) {
 			net->train(input1, 2, output1, 1);
 		}
@@ -43,11 +58,10 @@ int main()
 			net->train(input4, 2, output4, 1);
 		}
 	}
-	net->predict(input2, 2);
-	net->printLastResult();
+	net->predict(input3, 2);
+	//net->printLastResult();
 
 	delete net;
-
-	std::cin.get();
-	return 0;
 }
+
+

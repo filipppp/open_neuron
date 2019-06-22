@@ -18,12 +18,13 @@ Layer::~Layer()
 	{
 
 		delete[] biases;
-		std::cout << neurons[0];
 		delete[] neurons;
 
 		delete weights;
 		delete deltaWeightSum;
-		delete deltaBiasSum;
+		delete previousWeight;
+
+		delete[] deltaBiasSum;
 	}
 	catch (const std::exception& ex)
 	{
