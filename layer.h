@@ -9,7 +9,7 @@ public:
 
 	Matrix* weights{};
 	Matrix* deltaWeightSum{};
-	Matrix* previousWeight{};
+	Matrix* previousDeltaWeight{};
 
 	double* biases;
 	double* deltaBiasSum;

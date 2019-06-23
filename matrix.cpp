@@ -151,9 +151,26 @@ Matrix* Matrix::multiply(double* x1, size_t x1Length, double* x2, size_t x2Lengt
 	return matrix;
 }
 
+Matrix* Matrix::multiply(double multiplier) {
+	for (size_t i = 0; i < rows; i++) {
+		for (size_t j = 0; j < cols; j++) {
+			data[i * cols + j] *= multiplier;
+		}
+	}
+	return this;
+}
 
-double Matrix::averageValue() const
-{
+Matrix* Matrix::zero() {
+	for (size_t i = 0; i < rows; i++) {
+		for (size_t j = 0; j < cols; j++) {
+			data[i * cols + j] = 0;
+		}
+	}
+	return this;
+}
+
+
+double Matrix::averageValue() const {
 	double sum = 0;
 	for (size_t i = 0; i < rows; i++) {
 		for (size_t j = 0; j < cols; j++) {

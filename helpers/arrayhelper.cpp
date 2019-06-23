@@ -67,6 +67,12 @@ double* ArrayHelper::multiply(double* x, double multiplier, size_t size)
 	return output;
 }
 
+void ArrayHelper::zero(double* arr, size_t length) {
+	for (size_t i = 0; i < length; ++i) {
+		arr[i] = 0;
+	}
+}
+
 void ArrayHelper::add(double* x1, double* x2, size_t size)
 {
 	for (size_t i = 0; i < size; i++)

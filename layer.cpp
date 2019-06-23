@@ -22,7 +22,7 @@ Layer::~Layer()
 
 		delete weights;
 		delete deltaWeightSum;
-		delete previousWeight;
+		delete previousDeltaWeight;
 
 		delete[] deltaBiasSum;
 	}

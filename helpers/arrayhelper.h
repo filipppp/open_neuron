@@ -11,6 +11,7 @@ public:
 	static double* mapTo(double* arr, size_t size, Activation func, bool derivative = false);
 	static double* matrixTo1DArray(Matrix* singleDimensionMatrix);
 	static double* multiply(double* x, double multiplier, size_t size);
+	static void zero(double* arr, size_t length);
 	static void add(double* x1, double* x2, size_t size);
 
 	static double* hadamardArray(double* x1, double*x2, size_t size);

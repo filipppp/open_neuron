@@ -16,6 +16,8 @@ class Matrix {
 		Matrix* add(Matrix* input);
 		Matrix* print();
 		Matrix* add(double* input, size_t length);
+		Matrix* multiply(double multiplier);
+		Matrix* zero();
 
 		double* apply(Activation func);
 		double* to1d();

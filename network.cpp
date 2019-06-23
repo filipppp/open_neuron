@@ -18,8 +18,8 @@ Network::Network(Layer** layers, size_t layerCount, double learningRate, unsigne
 
 	for (size_t i = 1; i < layerCount; i++) {
 		layers[i]->weights = (new Matrix(layers[i]->nodeCount, layers[i - 1]->nodeCount))->random();
-		layers[i]->previousWeight = (new Matrix(layers[i]->nodeCount, layers[i - 1]->nodeCount, true));
-		layers[i]->deltaWeightSum = Matrix::copy(layers[i]->previousWeight);
+		layers[i]->previousDeltaWeight = (new Matrix(layers[i]->nodeCount, layers[i - 1]->nodeCount, true));
+		layers[i]->deltaWeightSum = Matrix::copy(layers[i]->previousDeltaWeight);
 	}
 }
 
@@ -83,31 +83,60 @@ void Network::train(double* input, size_t inputLength, double* targetOutput,size
 
 	/* Iterating through layers from behind */
 	for (size_t i = layerCount - 1; i > 0; i--) {
+		/* Calculate neurons derivative */
 		double* neuronsDerivative = ArrayHelper::mapTo(layers[i]->neurons, layers[i]->nodeCount, layers[i]->func, true);
 
+		/* Calculate gradient with formula: activation'(neurons) * Error * learningRate */
 		double* errorMultNeurons = ArrayHelper::hadamardArray(neuronsDerivative, errorMatrices[i], layers[i]->nodeCount);
 		double* gradient = ArrayHelper::multiply(errorMultNeurons, learningRate, layers[i]->nodeCount);
 
+		/* Clear Memory used for calculation */
 		delete[] neuronsDerivative;
 		delete[] errorMultNeurons;
 
-		Matrix* deltaWeights = Matrix::multiply(gradient, layers[i]->nodeCount, layers[i - 1]->neurons, layers[i - 1]->nodeCount);
-		layers[i]->weights->add(deltaWeights);
-		delete deltaWeights;
+		/*
+		 * Calculate how to adjust weights of current layer
+		 * Adjust sum of batch (will be added afterwards to the real weights of the network)s 
+		 */
+		Matrix* deltaWeights = Matrix::multiply(gradient, layers[i]->nodeCount, layers[i - 1]->neurons, layers[i - 1]->nodeCount)
+									->add(layers[i]->previousDeltaWeight->multiply(momentum));
+		layers[i]->deltaWeightSum->add(deltaWeights);
 
-		ArrayHelper::add(layers[i]->biases, gradient, layers[i]->nodeCount);
+		/* Delete last previous delta weight and set the new one (momentum optimization) */
+		delete layers[i]->previousDeltaWeight;
+		layers[i]->previousDeltaWeight = deltaWeights;
+
+		/* Adjust bias sum */
+		ArrayHelper::add(layers[i]->deltaBiasSum, gradient, layers[i]->nodeCount);
 
 		delete[] gradient;
 
+		/* Calculate error output for previous layer for further calculation */
 		Matrix* weightsTransposed = Matrix::transpose(layers[i]->weights);
 		Matrix* errorMatrix = Matrix::multiply(weightsTransposed, errorMatrices[i], layers[i]->nodeCount);
 		errorMatrices[i - 1] = errorMatrix->to1d();
 		delete weightsTransposed;
 		delete errorMatrix;
 	}
+	batchTrained++;
 
+	/* Check if batch training is finished */
+	if (batchTrained >= batchSize) {
+		for (size_t i = layerCount - 1; i > 0; i--) {
+			/* Adjust calculated batch data for weights and biasess*/
+			layers[i]->weights->add(layers[i]->deltaWeightSum);
+			ArrayHelper::add(layers[i]->biases, layers[i]->deltaBiasSum, layers[i]->nodeCount);
+
+			/* Set calculated batch to zero again*/
+			layers[i]->deltaWeightSum->zero();
+			ArrayHelper::zero(layers[i]->deltaBiasSum, layers[i]->nodeCount);
+		}
+		batchTrained = 0;
+	}
+
+	/* Clear Error Matrices */
 	for (size_t i = 0; i < layerCount; ++i) {
 		delete[] errorMatrices[i];
- 	}
+	}
 	delete[] errorMatrices;
 }
