@@ -34,10 +34,8 @@ Matrix::~Matrix() {
 
 
 Matrix* Matrix::random() {
-	for (size_t i = 0; i < rows; i++) {
-		for (size_t j = 0; j < cols; j++) {
-			data[i * cols + j] = ((double)std::rand() / RAND_MAX) * 2 - 1;
-		}
+	for (size_t i = 0; i < rows*cols; i++) {
+		data[i] = ((double)std::rand() / RAND_MAX) * 2 - 1;
 	}
 	return this;
 }
@@ -48,10 +46,8 @@ Matrix* Matrix::add(Matrix* input) {
 		return nullptr;
 	}
 
-	for (size_t i = 0; i < rows; i++) {
-		for (size_t j = 0; j < cols; j++) {
-			data[i * cols + j] += input->data[i * cols + j];
-		}
+	for (size_t i = 0; i < rows*cols; i++) {
+		data[i] += input->data[i];
 	}
 	return this;
 }
@@ -74,10 +70,9 @@ double* Matrix::apply(Activation func) {
 		return nullptr; 
 	}
 
-	double* oneDimArray = ArrayHelper::matrixTo1DArray(this);
-	double* output = ArrayHelper::mapTo(oneDimArray, rows, func);
-	delete oneDimArray;
-	return output;
+	double* oneDimArray = to1d();
+	ArrayHelper::mapTo(oneDimArray, rows, func);
+	return oneDimArray;
 }
 
 //////////////////
@@ -141,8 +136,7 @@ Matrix* Matrix::multiply(double* x1, size_t x1Length, double* x2, size_t x2Lengt
 	for (size_t i = 0; i < x1Length; i++) {
 		for (size_t j = 0; j < x2Length; j++) {
 			double sum = 0;
-			for (size_t k = 0; k < x2Length; ++k)
-			{
+			for (size_t k = 0; k < x2Length; ++k) {
 				sum += x1[i] * x2[k];
 			}
 			matrix->data[i * x2Length + j] = sum;
@@ -152,19 +146,15 @@ Matrix* Matrix::multiply(double* x1, size_t x1Length, double* x2, size_t x2Lengt
 }
 
 Matrix* Matrix::multiply(double multiplier) {
-	for (size_t i = 0; i < rows; i++) {
-		for (size_t j = 0; j < cols; j++) {
-			data[i * cols + j] *= multiplier;
-		}
+	for (size_t i = 0; i < rows*cols; i++) {
+			data[i] *= multiplier;
 	}
 	return this;
 }
 
 Matrix* Matrix::zero() {
-	for (size_t i = 0; i < rows; i++) {
-		for (size_t j = 0; j < cols; j++) {
-			data[i * cols + j] = 0;
-		}
+	for (size_t i = 0; i < rows*cols; i++) {
+			data[i] = 0;
 	}
 	return this;
 }
@@ -172,10 +162,8 @@ Matrix* Matrix::zero() {
 
 double Matrix::averageValue() const {
 	double sum = 0;
-	for (size_t i = 0; i < rows; i++) {
-		for (size_t j = 0; j < cols; j++) {
-			sum += data[i * cols + j];
-		}
+	for (size_t i = 0; i < rows*cols; i++) {
+			sum += data[i];
 	}
 	return sum / (rows * cols);
 }
@@ -197,10 +185,8 @@ Matrix* Matrix::hadamard(Matrix* m1, Matrix* m2) {
 	}
 
 	Matrix* matrix = new Matrix(m1->rows, m1->cols);
-	for (size_t i = 0; i < m1->rows; i++) {
-		for (size_t j = 0; j < m1->cols; j++) {
-			matrix->data[i * matrix->cols + j] = m1->data[i * m1->cols + j] * m2->data[i * m2->cols + j];
-		}
+	for (size_t i = 0; i < matrix->rows*matrix->cols; i++) {
+			matrix->data[i] = m1->data[i] * m2->data[i];
 	}
 	return matrix;
 }
@@ -212,10 +198,8 @@ Matrix* Matrix::subtract(Matrix* m1, Matrix* m2) {
 	}
 
 	Matrix* matrix = new Matrix(m1->rows, m1->cols);
-	for (size_t i = 0; i < m1->rows; i++) {
-		for (size_t j = 0; j < m1->cols; j++) {
-			matrix->data[i * matrix->cols + j] = m1->data[i * m1->cols + j] - m2->data[i * m2->cols + j];
-		}
+	for (size_t i = 0; i < matrix->rows*matrix->cols; i++) {
+			matrix->data[i] = m1->data[i] - m2->data[i];
 	}
 	return matrix;
 }
@@ -232,10 +216,8 @@ Matrix* Matrix::transpose(Matrix* m1) {
 
 Matrix* Matrix::copy(Matrix* toCopy) {
 	Matrix* matrix = new Matrix(toCopy->rows, toCopy->cols);
-	for (size_t i = 0; i < matrix->rows; i++) {
-		for (size_t j = 0; j < matrix->cols; j++) {
-			matrix->data[i * matrix->cols + j] = toCopy->data[i * toCopy->cols + j];
-		}
+	for (size_t i = 0; i < matrix->rows*matrix->cols; i++) {
+			matrix->data[i] = toCopy->data[i];
 	}
 	return matrix;
 }

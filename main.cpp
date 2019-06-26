@@ -32,7 +32,7 @@ void nnTest() {
 	};
 
 
-	Network* net = new Network(layers, layercount, 0.01, 20, 0.75);
+	Network* net = new Network(layers, layercount, 0.05, 20, 0.75);
 	double input1[2] = { 0, 0 };
 	double input2[2] = { 0, 1.0 };
 	double input3[2] = { 1.0, 0 };

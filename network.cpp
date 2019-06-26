@@ -23,8 +23,7 @@ Network::Network(Layer** layers, size_t layerCount, double learningRate, unsigne
 	}
 }
 
-Network::~Network()
-{
+Network::~Network() {
 	for (int i = 0; i < layerCount; ++i)
 	{
 		delete layers[i];
@@ -32,9 +31,9 @@ Network::~Network()
 	// delete[] layers;
 }
 
-double* Network::predict(double* inputs, size_t length)
-{
+double* Network::predict(double* inputs, size_t length) {
 	if (length != layers[0]->nodeCount) {
+		std::cout << "Inputs don't match Input Model Layer";
 		return nullptr;
 	}
 
@@ -84,19 +83,18 @@ void Network::train(double* input, size_t inputLength, double* targetOutput,size
 	/* Iterating through layers from behind */
 	for (size_t i = layerCount - 1; i > 0; i--) {
 		/* Calculate neurons derivative */
-		double* neuronsDerivative = ArrayHelper::mapTo(layers[i]->neurons, layers[i]->nodeCount, layers[i]->func, true);
+		ArrayHelper::mapTo(layers[i]->neurons, layers[i]->nodeCount, layers[i]->func, true);
 
-		/* Calculate gradient with formula: activation'(neurons) * Error * learningRate */
-		double* errorMultNeurons = ArrayHelper::hadamardArray(neuronsDerivative, errorMatrices[i], layers[i]->nodeCount);
+		/* Calculate gradient with formula: activation'(neurons) * Error * learningRate * input */
+		double* errorMultNeurons = ArrayHelper::hadamardArray(layers[i]->neurons, errorMatrices[i], layers[i]->nodeCount);
 		double* gradient = ArrayHelper::multiply(errorMultNeurons, learningRate, layers[i]->nodeCount);
 
 		/* Clear Memory used for calculation */
-		delete[] neuronsDerivative;
 		delete[] errorMultNeurons;
 
 		/*
 		 * Calculate how to adjust weights of current layer
-		 * Adjust sum of batch (will be added afterwards to the real weights of the network)s 
+		 * Adjust sum of batch (will be added afterwards to the real weights of the network)
 		 */
 		Matrix* deltaWeights = Matrix::multiply(gradient, layers[i]->nodeCount, layers[i - 1]->neurons, layers[i - 1]->nodeCount)
 									->add(layers[i]->previousDeltaWeight->multiply(momentum));
