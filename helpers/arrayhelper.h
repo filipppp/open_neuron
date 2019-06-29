@@ -8,13 +8,18 @@ public:
 
 	static double* getZero1D(size_t length);
 	static double* subtractArrays(const double* arr1, const double* arr2, size_t size);
-	static double* multiply(double* x, double multiplier, size_t size);
+	static double* hadamardArray(double* x, double* x2, size_t size);
+
 	static void zero(double* arr, size_t length);
 	static void mapTo(double* arr, size_t size, Activation func, bool derivative = false);
 	static void add(double* x1, double* x2, size_t size);
+	static void divide(double* x, double qoutient, size_t size);
+	static void multiply(double* x, double multiplier, size_t size);
+	static void print(double* x, size_t size);
+	static void subtract(double* x1, double* x2, size_t size);
+	static void copy(double* from, double* to, size_t size);
 
-	static double* hadamardArray(double* x1, double*x2, size_t size);
-
+	static double averageValue(double* x, size_t size);
 	static double maxNumber(const double* arr, size_t length);
 };
 

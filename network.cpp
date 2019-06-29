@@ -1,14 +1,14 @@
-#include "network.h"
+﻿#include "network.h"
 #include <array>
 #include "layer.h"
 #include "helpers/arrayhelper.h"
 #include "matrix.h"
-#include <iostream>
 #include "../../../../../../Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Tools/MSVC/14.21.27702/include/ctime"
+#include <iostream>
 
 Network::Network(Layer** layers, size_t layerCount, double learningRate, unsigned short batchSize, float momentum,
 	bool init) {
-	srand(time(NULL));
+	srand(static_cast<unsigned int>(time(NULL)));
 
 	this->layers = layers;
 	this->learningRate = learningRate;
@@ -17,21 +17,17 @@ Network::Network(Layer** layers, size_t layerCount, double learningRate, unsigne
 	this->layerCount = layerCount;
 
 	for (size_t i = 1; i < layerCount; i++) {
-		layers[i]->weights = (new Matrix(layers[i]->nodeCount, layers[i - 1]->nodeCount))->random();
-		layers[i]->previousDeltaWeight = (new Matrix(layers[i]->nodeCount, layers[i - 1]->nodeCount, true));
-		layers[i]->deltaWeightSum = Matrix::copy(layers[i]->previousDeltaWeight);
+		layers[i]->initWeights(layers[i - 1]);
 	}
 }
 
 Network::~Network() {
-	for (int i = 0; i < layerCount; ++i)
-	{
+	for (size_t i = 0; i < layerCount; ++i) {
 		delete layers[i];
 	}
-	// delete[] layers;
 }
 
-double* Network::predict(double* inputs, size_t length) {
+double* Network::predict(double* inputs, size_t length) const {
 	if (length != layers[0]->nodeCount) {
 		std::cout << "Inputs don't match Input Model Layer";
 		return nullptr;
@@ -61,12 +57,6 @@ double* Network::predict(double* inputs, size_t length) {
 	return layers[layerCount - 1]->neurons;
 }
 
-void Network::printLastResult() {
-	for (size_t i = 0; i < layers[layerCount-1]->nodeCount; i++) {
-		std::cout << layers[layerCount - 1]->neurons[i] << std::endl;
-	}
-}
-
 void Network::train(double* input, size_t inputLength, double* targetOutput,size_t targetOutputLength) {
 	if (targetOutputLength != layers[layerCount - 1]->nodeCount) { 
 		std::cout << "wrong training data";
@@ -85,34 +75,26 @@ void Network::train(double* input, size_t inputLength, double* targetOutput,size
 		/* Calculate neurons derivative */
 		ArrayHelper::mapTo(layers[i]->neurons, layers[i]->nodeCount, layers[i]->func, true);
 
-		/* Calculate gradient with formula: activation'(neurons) * Error * learningRate * input */
-		double* errorMultNeurons = ArrayHelper::hadamardArray(layers[i]->neurons, errorMatrices[i], layers[i]->nodeCount);
-		double* gradient = ArrayHelper::multiply(errorMultNeurons, learningRate, layers[i]->nodeCount);
-
-		/* Clear Memory used for calculation */
-		delete[] errorMultNeurons;
-
+		/* Calculate gradient with formula: activation'(neurons) ⊗ Error * learningRate x input */
+		double* gradientBase = ArrayHelper::hadamardArray(layers[i]->neurons, errorMatrices[i], layers[i]->nodeCount);
 		/*
 		 * Calculate how to adjust weights of current layer
 		 * Adjust sum of batch (will be added afterwards to the real weights of the network)
 		 */
-		Matrix* deltaWeights = Matrix::multiply(gradient, layers[i]->nodeCount, layers[i - 1]->neurons, layers[i - 1]->nodeCount)
-									->add(layers[i]->previousDeltaWeight->multiply(momentum));
+		Matrix* deltaWeights = Matrix::multiply(gradientBase, layers[i]->nodeCount, layers[i - 1]->neurons, layers[i - 1]->nodeCount);
 		layers[i]->deltaWeightSum->add(deltaWeights);
-
-		/* Delete last previous delta weight and set the new one (momentum optimization) */
-		delete layers[i]->previousDeltaWeight;
-		layers[i]->previousDeltaWeight = deltaWeights;
+		delete deltaWeights;
 
 		/* Adjust bias sum */
-		ArrayHelper::add(layers[i]->deltaBiasSum, gradient, layers[i]->nodeCount);
+		ArrayHelper::add(layers[i]->deltaBiasSum, gradientBase, layers[i]->nodeCount);
 
-		delete[] gradient;
+		delete[] gradientBase;
 
 		/* Calculate error output for previous layer for further calculation */
 		Matrix* weightsTransposed = Matrix::transpose(layers[i]->weights);
 		Matrix* errorMatrix = Matrix::multiply(weightsTransposed, errorMatrices[i], layers[i]->nodeCount);
 		errorMatrices[i - 1] = errorMatrix->to1d();
+
 		delete weightsTransposed;
 		delete errorMatrix;
 	}
@@ -121,7 +103,24 @@ void Network::train(double* input, size_t inputLength, double* targetOutput,size
 	/* Check if batch training is finished */
 	if (batchTrained >= batchSize) {
 		for (size_t i = layerCount - 1; i > 0; i--) {
-			/* Adjust calculated batch data for weights and biasess*/
+			/* Mutliply Learning Rate + momentum with Formula
+			 * delta = previousDelta * momentum + learningRate * ∇Loss
+			 */
+			layers[i]->deltaWeightSum
+			->multiply(learningRate)
+			->add(layers[i]->previousDeltaWeight->multiply(momentum));
+
+			ArrayHelper::multiply(layers[i]->deltaBiasSum, learningRate, layers[i]->nodeCount);
+			ArrayHelper::multiply(layers[i]->previousDeltaBias, momentum, layers[i]->nodeCount);
+			ArrayHelper::add(layers[i]->deltaBiasSum, layers[i]->previousDeltaBias, layers[i]->nodeCount);
+
+
+			/* Delete last previous deltas and set the new one (momentum optimization) */
+			Matrix::moveData(layers[i]->deltaWeightSum, layers[i]->previousDeltaWeight);
+			ArrayHelper::copy(layers[i]->deltaBiasSum, layers[i]->previousDeltaBias, layers[i]->nodeCount);
+
+
+			/* Adjust calculated batch data for weights and biases */
 			layers[i]->weights->add(layers[i]->deltaWeightSum);
 			ArrayHelper::add(layers[i]->biases, layers[i]->deltaBiasSum, layers[i]->nodeCount);
 
@@ -129,12 +128,29 @@ void Network::train(double* input, size_t inputLength, double* targetOutput,size
 			layers[i]->deltaWeightSum->zero();
 			ArrayHelper::zero(layers[i]->deltaBiasSum, layers[i]->nodeCount);
 		}
+
+
+		/* Debug */
+		if (1) {
+			double average = 0;
+			for (size_t i = 0; i < layers[layerCount - 1]->nodeCount; i++) {
+				average += pow(errorMatrices[layerCount - 1][i], 2);
+			}
+			std::cout << "Error Average: " << average / layers[layerCount - 1]->nodeCount << std::endl;
+		}
+
 		batchTrained = 0;
 	}
 
 	/* Clear Error Matrices */
-	for (size_t i = 0; i < layerCount; ++i) {
+	for (size_t i = 0; i < layerCount; i++) {
 		delete[] errorMatrices[i];
 	}
 	delete[] errorMatrices;
+}
+
+void Network::printLastResult() {
+	for (size_t i = 0; i < layers[layerCount - 1]->nodeCount; i++) {
+		std::cout << "Prediction: " << layers[layerCount - 1]->neurons[i] << std::endl;
+	}
 }

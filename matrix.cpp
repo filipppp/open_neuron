@@ -75,13 +75,11 @@ double* Matrix::apply(Activation func) {
 	return oneDimArray;
 }
 
-//////////////////
-double* Matrix::to1d() {
+double* Matrix::to1d() const {
 	if (cols != 1) { return nullptr; }
 
 	double* output = new double[rows];
-	for (size_t i = 0; i < rows; i++)
-	{
+	for (size_t i = 0; i < rows; i++) {
 		output[i] = data[i * cols];
 	}
 
@@ -148,6 +146,25 @@ Matrix* Matrix::multiply(double* x1, size_t x1Length, double* x2, size_t x2Lengt
 Matrix* Matrix::multiply(double multiplier) {
 	for (size_t i = 0; i < rows*cols; i++) {
 			data[i] *= multiplier;
+	}
+	return this;
+}
+
+Matrix* Matrix::divide(double quotient) {
+	for (size_t i = 0; i < rows * cols; i++) {
+		data[i] /= quotient;
+	}
+	return this;
+}
+
+Matrix* Matrix::subtract(Matrix* m) {
+	if (rows != m->rows || cols != m->cols) {
+		std::cout << "Rows and Columns of both matrices don't match";
+		return nullptr;
+	}
+
+	for (size_t i = 0; i < rows * cols; i++) {
+		data[i] -= m->data[i];
 	}
 	return this;
 }
@@ -220,4 +237,15 @@ Matrix* Matrix::copy(Matrix* toCopy) {
 			matrix->data[i] = toCopy->data[i];
 	}
 	return matrix;
+}
+
+void Matrix::moveData(Matrix* from, Matrix* to) {
+	if (from->rows != to->rows || from->cols != to->cols) {
+		std::cout << "Can't move data because the rows and columns don't match up";
+		return;
+	}
+
+	for (size_t i = 0; i < from->rows * from->cols; i++) {
+		to->data[i] = from->data[i];
+	}
 }

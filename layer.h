@@ -13,7 +13,8 @@ public:
 
 	double* biases;
 	double* deltaBiasSum;
-	
+	double* previousDeltaBias{};
+
 	double* neurons;
 
 	Activation func;
@@ -22,6 +23,8 @@ public:
 
 	Layer(size_t nodeCount,  Activation func);
 	~Layer();
+
+	void initWeights(Layer* previousLayer);
 
 };
 

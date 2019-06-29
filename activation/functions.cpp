@@ -52,13 +52,11 @@ double Functions::derivativeTanh(double x) {
 void Functions::softmax(double* arr, size_t size) {
 	double sum = 0;
 	double max = ArrayHelper::maxNumber(arr, size);
-	for (unsigned long i = 0; i < size; i++)
-	{
+	for (size_t i = 0; i < size; i++) {
 		/* number - max to decrease size of numbers because of exponential nature */
 		sum += exp(arr[i] - max);
 	}
-	for (unsigned long i = 0; i < size; i++)
-	{
+	for (size_t i = 0; i < size; i++) {
 		arr[i] = exp(arr[i] - max) / sum;
 	}
 }
@@ -68,8 +66,7 @@ void Functions::derivativeSoftmax(double* arr, size_t size) {
 }
 
 double Functions::getValue(double x, Activation func, bool derivative) {
-	switch (func)
-	{
+	switch (func) {
 	case SIGMOID:
 		return derivative ? derivativeSigmoid(x) : sigmoid(x);
 	case RELU:

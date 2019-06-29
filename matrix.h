@@ -17,10 +17,12 @@ class Matrix {
 		Matrix* print();
 		Matrix* add(double* input, size_t length);
 		Matrix* multiply(double multiplier);
+		Matrix* divide(double quotient);
+		Matrix* subtract(Matrix* m);
 		Matrix* zero();
 
 		double* apply(Activation func);
-		double* to1d();
+		double* to1d() const;
 		double averageValue() const;
 
 		static Matrix* hadamard(Matrix* m1, Matrix* m2);
@@ -30,6 +32,8 @@ class Matrix {
 		static Matrix* multiply(Matrix* m1, Matrix* m2);
 		static Matrix* multiply(Matrix* m1, const double* singleMatrix, size_t singleMatrixLength);
 		static Matrix* multiply(double* x1, size_t x1Length, double* x2, size_t x2Length);
+
+		static void moveData(Matrix* from, Matrix* to);
 };
 
 #endif

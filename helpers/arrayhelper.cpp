@@ -40,14 +40,11 @@ void ArrayHelper::mapTo(double* arr, size_t size, Activation func, bool derivati
 	}
 }
 
-
-double* ArrayHelper::multiply(double* x, double multiplier, size_t size)
+void ArrayHelper::multiply(double* x, double multiplier, size_t size)
 {
-	double* output = new double[size];
 	for (size_t i = 0; i < size; i++) {
-		output[i] = x[i] * multiplier;
+		x[i] *= multiplier;
 	}
-	return output;
 }
 
 void ArrayHelper::zero(double* arr, size_t length) {
@@ -60,6 +57,39 @@ void ArrayHelper::add(double* x1, double* x2, size_t size) {
 	for (size_t i = 0; i < size; i++) {
 		x1[i] += x2[i];
 	}
+}
+
+void ArrayHelper::divide(double* x, double qoutient, size_t size) {
+	for (size_t i = 0; i < size; ++i) {
+		x[i] /= qoutient;
+	}
+}
+
+void ArrayHelper::print(double* x, size_t size) {
+	for (size_t i = 0; i < size; i++) {
+		std::cout << x[i] << " , ";
+	}
+	std::cout << std::endl;
+}
+
+void ArrayHelper::subtract(double* x1, double* x2, size_t size) {
+	for (size_t i = 0; i < size; ++i) {
+		x1[i] -= x2[i];
+	}
+}
+
+void ArrayHelper::copy(double* from, double* to, size_t size) {
+	for (size_t i = 0; i < size; i++) {
+		to[i] = from[i];
+	}
+}
+
+double ArrayHelper::averageValue(double* x, size_t size) {
+	double sum = 0;
+	for (size_t i = 0; i < size; i++) {
+		sum += abs(x[i]);
+	}
+	return sum / size;
 }
 
 double* ArrayHelper::hadamardArray(double* x1, double* x2, size_t size) {

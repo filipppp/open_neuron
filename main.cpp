@@ -5,13 +5,11 @@
 #include "network.h"
 #include "layer.h"
 #include "../../../../../../Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Tools/MSVC/14.21.27702/include/chrono"
-typedef long long int64; typedef unsigned long long uint64;
 
 
 void nnTest();
 
-int main()
-{
+int main() {
 	auto t1 = std::chrono::high_resolution_clock::now();
 	nnTest();
 	auto t2 = std::chrono::high_resolution_clock::now();
@@ -32,7 +30,7 @@ void nnTest() {
 	};
 
 
-	Network* net = new Network(layers, layercount, 0.05, 20, 0.75);
+	Network* net = new Network(layers, layercount, 0.01, 32, 0.9);
 	double input1[2] = { 0, 0 };
 	double input2[2] = { 0, 1.0 };
 	double input3[2] = { 1.0, 0 };
@@ -43,7 +41,7 @@ void nnTest() {
 	double output3[1] = { 1.0 };
 	double output4[1] = { 0 };
 
-	for (unsigned long i = 0; i < 200000; i++) {
+	for (size_t i = 0; i < 10000; i++) {
 		double random = (double)std::rand() / RAND_MAX;
 		if (random < 0.25) {
 			net->train(input1, 2, output1, 1);
@@ -58,7 +56,13 @@ void nnTest() {
 			net->train(input4, 2, output4, 1);
 		}
 	}
+	net->predict(input1, 2);
+	net->printLastResult();
+	net->predict(input2, 2);
+	net->printLastResult();
 	net->predict(input3, 2);
+	net->printLastResult();
+	net->predict(input4, 2);
 	net->printLastResult();
 
 	delete net;
