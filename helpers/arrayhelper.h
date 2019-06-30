@@ -18,6 +18,7 @@ public:
 	static void print(double* x, size_t size);
 	static void subtract(double* x1, double* x2, size_t size);
 	static void copy(double* from, double* to, size_t size);
+	static void shuffleTrainingData(double** inputs, double** outputs, size_t trainingCount);
 
 	static double averageValue(double* x, size_t size);
 	static double maxNumber(const double* arr, size_t length);

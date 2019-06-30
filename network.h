@@ -12,13 +12,12 @@ public:
 	double momentum;
 
 	unsigned short batchTrained = 0;
-	unsigned short batchSize;
-
-	Network(Layer** layers, size_t layerCount, double learningRate, unsigned short batchSize, float momentum, bool init = false);
+	Network(Layer** layers, size_t layerCount, double learningRate, float momentum, bool init = false);
 	~Network();
 
 	double* predict(double* inputs, size_t length) const;
-	void train(double* inputs, size_t inputLength, double* output, size_t outputLength);
+	void train(double** inputs, double** outputs, size_t trainingSize, size_t epochs = 2, size_t batchSize = 20, bool verbose = false);
+	void applyMiniBatch();
 
 	void printLastResult();
 };

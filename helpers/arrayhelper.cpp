@@ -84,6 +84,22 @@ void ArrayHelper::copy(double* from, double* to, size_t size) {
 	}
 }
 
+void ArrayHelper::shuffleTrainingData(double** inputs, double** outputs, size_t trainingCount) {
+	for (size_t i = 0; i < trainingCount; ++i) {
+		size_t randIndex = i + std::rand() % (trainingCount - i);
+
+		if (randIndex != i) {
+			double* address = inputs[i];
+			inputs[i] = inputs[randIndex];
+			inputs[randIndex] = address;
+
+			address = outputs[i];
+			outputs[i] = outputs[randIndex];
+			outputs[randIndex] = address;
+		}
+	}
+}
+
 double ArrayHelper::averageValue(double* x, size_t size) {
 	double sum = 0;
 	for (size_t i = 0; i < size; i++) {

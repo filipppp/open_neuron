@@ -30,32 +30,36 @@ void nnTest() {
 	};
 
 
-	Network* net = new Network(layers, layercount, 0.01, 32, 0.9);
+	Network* net = new Network(layers, layercount, 0.01, 0.9);
+
+	double** inputs = new double* [4];
+	double** outputs = new double* [4];
+	for (size_t i = 0; i < 4; ++i) {
+		inputs[i] = new double[2];
+		outputs[i] = new double[1];
+	}
+	inputs[0][0] =	0;
+	inputs[0][1] =	0;
+	outputs[0][0] =	0;
+
+	inputs[1][0] =	0;
+	inputs[1][1] =	1;
+	outputs[1][0] = 1;
+
+	inputs[2][0] =	1;
+	inputs[2][1] =	0;
+	outputs[2][0] =	1;
+
+	inputs[3][0] =	1;
+	inputs[3][1] =	1;
+	outputs[3][0] = 0;
+
+	net->train(inputs, outputs, 4, 10000, 32, true);
+
 	double input1[2] = { 0, 0 };
 	double input2[2] = { 0, 1.0 };
 	double input3[2] = { 1.0, 0 };
 	double input4[2] = { 1.0, 1.0 };
-
-	double output1[1] = { 0 };
-	double output2[1] = { 1.0 };
-	double output3[1] = { 1.0 };
-	double output4[1] = { 0 };
-
-	for (size_t i = 0; i < 10000; i++) {
-		double random = (double)std::rand() / RAND_MAX;
-		if (random < 0.25) {
-			net->train(input1, 2, output1, 1);
-		}
-		else if (random > 0.25 && random < 0.5) {
-			net->train(input2, 2, output2, 1);
-		}
-		else if (random > 0.5 && random < 0.75) {
-			net->train(input3, 2, output3, 1);
-		}
-		else {
-			net->train(input4, 2, output4, 1);
-		}
-	}
 	net->predict(input1, 2);
 	net->printLastResult();
 	net->predict(input2, 2);
