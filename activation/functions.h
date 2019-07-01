@@ -4,8 +4,7 @@
 
 enum Activation { SIGMOID, RELU, IDENTITY, BINARY, TANH, SOFTMAX};
 
-class Functions
-{
+class Functions {
 public:
 	static double sigmoid(double x);
 	static double derivativeSigmoid(double x);

@@ -4,8 +4,9 @@
 #include "main.h"
 #include "network.h"
 #include "layer.h"
-#include "../../../../../../Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Tools/MSVC/14.21.27702/include/chrono"
+#include <chrono>
 
+class Network;
 
 void nnTest();
 
@@ -60,6 +61,7 @@ void nnTest() {
 	double input2[2] = { 0, 1.0 };
 	double input3[2] = { 1.0, 0 };
 	double input4[2] = { 1.0, 1.0 };
+
 	net->predict(input1, 2);
 	net->printLastResult();
 	net->predict(input2, 2);

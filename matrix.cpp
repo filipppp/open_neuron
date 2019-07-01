@@ -2,8 +2,8 @@
 #include <stdexcept>
 #include <iostream>
 #include "matrix.h"
-#include "helpers/arrayhelper.h"
-#include "activation/functions.h"
+#include <arrayhelper.h>
+#include <functions.h>
 
 /*
  *

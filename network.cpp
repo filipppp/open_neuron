@@ -1,9 +1,9 @@
 ﻿#include "network.h"
 #include <array>
 #include "layer.h"
-#include "helpers/arrayhelper.h"
+#include <arrayhelper.h>
 #include "matrix.h"
-#include "../../../../../../Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Tools/MSVC/14.21.27702/include/ctime"
+#include <ctime>
 #include <iostream>
 
 Network::Network(Layer** layers, size_t layerCount, double learningRate, float momentum,

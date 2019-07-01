@@ -1,6 +1,8 @@
 #include "layer.h"
-#include "helpers/arrayhelper.h"
-#include "activation/functions.h"
+#include <arrayhelper.h>
+
+#include <functions.h>
+
 Layer::Layer(size_t nodeCount, Activation func) {
 	neurons = ArrayHelper::getZero1D(nodeCount);
 

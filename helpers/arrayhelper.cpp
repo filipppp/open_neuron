@@ -1,5 +1,4 @@
 #include "arrayhelper.h"
-#include "../matrix.h"
 #include <iostream>
 
 double* ArrayHelper::getArray(size_t rows, size_t cols, bool zero) {
