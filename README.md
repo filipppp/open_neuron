@@ -53,6 +53,9 @@ If you want to add any features, just fork this repository and make a pull reque
 ### Todos
 
  - Implement CNNs
+ - Implement RNNs
+ - Implement LSTMs
+ 
  - Implement multiple optimizers
  - Implement multiple loss functions
 
