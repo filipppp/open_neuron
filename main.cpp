@@ -2,8 +2,8 @@
 //
 
 #include "main.h"
-#include "network.h"
-#include "layer.h"
+#include <network/network.h>
+#include <network/layer.h>
 #include <chrono>
 
 class Network;

@@ -1,7 +1,7 @@
 #ifndef layer_h
 #define layer_h
-#include "activation/functions.h"
-#include "matrix.h"
+#include <neuralmath/functions.h>
+#include <neuralmath/matrix.h>
 
 
 class Layer {

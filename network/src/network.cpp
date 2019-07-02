@@ -1,10 +1,12 @@
 ﻿#include "network.h"
 #include <array>
 #include "layer.h"
-#include <arrayhelper.h>
-#include "matrix.h"
+#include <arrayhelper/arrayhelper.h>
+#include <math/matrix.h>
 #include <ctime>
 #include <iostream>
+#include <cmath>
+
 
 Network::Network(Layer** layers, size_t layerCount, double learningRate, float momentum,
 	bool init) {

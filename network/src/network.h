@@ -1,5 +1,6 @@
-#ifndef layer_h
-#define layer
+#ifndef network_h
+#define network_h
+#include <cstddef>
 
 class Layer;
 

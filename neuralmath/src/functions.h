@@ -1,6 +1,6 @@
 #ifndef functions_h
 #define functions_h
-
+#include <cstddef>
 
 enum Activation { SIGMOID, RELU, IDENTITY, BINARY, TANH, SOFTMAX};
 

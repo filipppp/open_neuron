@@ -1,6 +1,8 @@
 #ifndef arrayhelper_h
 #define arrayhelper_h
-#include "../layer.h"
+#include <network/layer.h>
+#include <math/functions.h>
+
 
 class ArrayHelper {
 public:

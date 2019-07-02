@@ -1,0 +1,9 @@
+{
+    "cmake.configureOnOpen": true,
+    "files.associations": {
+        "chrono": "cpp",
+        "cmath": "cpp",
+        "array": "cpp"
+    },
+    "C_Cpp.errorSquiggles": "Disabled"
+}

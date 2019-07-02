@@ -1,6 +1,6 @@
 #ifndef matrix_h
 #define matrix_h
-#include "activation/functions.h"
+#include "functions.h"
 
 class Matrix {
 	public:
