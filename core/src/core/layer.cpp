@@ -1,6 +1,6 @@
 #include "layer.h"
-#include <arrayhelper/arrayhelper.h>
-#include <neuralmath/functions.h>
+#include "arrayhelper.h"
+#include "functions.h"
 
 
 Layer::Layer(size_t nodeCount, Activation func) {

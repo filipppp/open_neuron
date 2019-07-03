@@ -2,7 +2,7 @@
 #include <stdexcept>
 #include <iostream>
 #include "matrix.h"
-#include <arrayhelper/arrayhelper.h>
+#include "arrayhelper.h"
 #include "functions.h"
 
 /*
@@ -20,7 +20,7 @@ Matrix::Matrix(size_t rows, size_t cols, bool init) {
 	this->rows = rows;
 	this->cols = cols;
 	this->data = ArrayHelper::getArray(rows, cols, init);
-
+}
 
 Matrix::Matrix(size_t rows, size_t cols, double* data) {
 	this->rows = rows;

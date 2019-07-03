@@ -1,6 +1,6 @@
 #include "functions.h"
 #include <cmath>
-#include <arrayhelper/arrayhelper.h>
+#include "arrayhelper.h"
 #include <iostream>
 #include <cmath>
 

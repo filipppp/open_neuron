@@ -2,11 +2,9 @@
 //
 
 #include "main.h"
-#include <network/network.h>
-#include <network/layer.h>
+#include <core/network.h>
+#include <core/layer.h>
 #include <chrono>
-
-class Network;
 
 void nnTest();
 
@@ -55,7 +53,7 @@ void nnTest() {
 	inputs[3][1] =	1;
 	outputs[3][0] = 0;
 
-	net->train(inputs, outputs, 4, 10000, 32, true);
+	net->train(inputs, outputs, 4, 50000, 32, true);
 
 	double input1[2] = { 0, 0 };
 	double input2[2] = { 0, 1.0 };

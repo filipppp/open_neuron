@@ -1,8 +1,7 @@
 ﻿#include "network.h"
-#include <array>
 #include "layer.h"
-#include <arrayhelper/arrayhelper.h>
-#include <math/matrix.h>
+#include "arrayhelper.h"
+#include "matrix.h"
 #include <ctime>
 #include <iostream>
 #include <cmath>
