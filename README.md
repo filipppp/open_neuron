@@ -37,7 +37,7 @@ $ cd ./open_neuron
 Include the *network.h* file to start and to create your network
 
 ```sh
-#include "open_neuron/network.h"
+#include <core/network.h>
 
 void main() {
     Network* net = new Network(layers, layerCount, learningRate, momentum);
