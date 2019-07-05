@@ -16,9 +16,11 @@ There are two ways to use OpenNeuron:
 
 ##### BUILD
 
-To build from the source yourself, clone this repo
+To build from the source yourself, clone this repo 
 
 ###### Linux
+
+Run the build script provided in the repo, the build will appear in the dist/ folder
 ```sh
 $ ./build.sh
 ```
