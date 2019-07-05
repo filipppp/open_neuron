@@ -14,12 +14,18 @@ OpenNeuron is a C++ Neural Network which implements the following features:
 
 There are two ways to use OpenNeuron:
 
-##### CLI
+##### BUILD
 
-To use the CLI download the build for your OS
+To build from the source yourself, clone this repo
+
+###### Linux
 ```sh
-$ ./open-neuron
+$ ./build.sh
 ```
+###### Windows
+
+Use the CMake GUI
+
 ##### Source
 If you want to use the source code itself
 
