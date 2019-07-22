@@ -1,11 +1,11 @@
-# OpenNeuron
+# OpenNeuron ☜(ﾟヮﾟ☜)
 
 [![open_neuron](http://kekomat11.ddnss.de/n.svg)](https://openneuron.cf)
 
 
 OpenNeuron is a C++ Neural Network which implements the following features:
 
-  - Customizable Models
+  - Customizable Models 
   - Beginner friendly API
   - Different Activation and Loss Functions
   - Lots of optimizers!
@@ -14,7 +14,7 @@ OpenNeuron is a C++ Neural Network which implements the following features:
 
 There are two ways to use OpenNeuron:
 
-##### BUILD
+##### Build
 
 To build from the source yourself, clone this repo 
 
