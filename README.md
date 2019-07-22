@@ -1,6 +1,6 @@
 # OpenNeuron
 
-[![N|Solid](https://cldup.com/dTxpPi9lDf.thumb.png)](https://nodesource.com/products/nsolid)
+[![N|Solid](http://kekomat11.ddnss.de/n.svg)](https://openneuron.cf)
 
 
 OpenNeuron is a C++ Neural Network which implements the following features:
