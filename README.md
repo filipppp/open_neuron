@@ -1,6 +1,6 @@
 # OpenNeuron ☜(ﾟヮﾟ☜)
 
-[![open_neuron](http://kekomat11.ddnss.de/n.svg)](https://openneuron.cf)
+[![open_neuron](http://kekomat11.ddnss.de/n.png)](https://openneuron.cf)
 
 
 OpenNeuron is a C++ Neural Network which implements the following features:
