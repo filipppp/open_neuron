@@ -66,7 +66,7 @@ void Network::train(double** inputs, double** outputs, size_t trainingSize, size
 		for (size_t trainingCount = 0; trainingCount < trainingSize; trainingCount++) {
 			/* Calculate Error which Network gives for specific input */
 			double* predictedOutput = predict(inputs[trainingCount], layers[0]->nodeCount);
-			double* outputError = ArrayHelper::subtractArrays(outputs[trainingCount], predictedOutput, layers[layerCount-1]->nodeCount);
+			double* outputError = ArrayHelper::subtractArrays(predictedOutput, outputs[trainingCount], layers[layerCount-1]->nodeCount);
 
 			double** errorMatrices = new double* [layerCount];
 			errorMatrices[layerCount - 1] = outputError;
@@ -138,12 +138,12 @@ void Network::applyMiniBatch() {
 			ArrayHelper::add(layers[i]->deltaBiasSum, layers[i]->previousDeltaBias, layers[i]->nodeCount);
 
 			/* Delete last previous deltas and set the new one (momentum optimization) */
-			Matrix::moveData(layers[i]->deltaWeightSum, layers[i]->previousDeltaWeight);
+			Matrix::moveData(layers[i]->previousDeltaWeight, layers[i]->deltaWeightSum);
 			ArrayHelper::copy(layers[i]->deltaBiasSum, layers[i]->previousDeltaBias, layers[i]->nodeCount);
 
 			/* Adjust calculated batch data for weights and biases */
-			layers[i]->weights->add(layers[i]->deltaWeightSum);
-			ArrayHelper::add(layers[i]->biases, layers[i]->deltaBiasSum, layers[i]->nodeCount);
+			layers[i]->weights->subtract(layers[i]->deltaWeightSum);
+			ArrayHelper::subtract(layers[i]->biases, layers[i]->deltaBiasSum, layers[i]->nodeCount);
 
 			/* Set calculated batch to zero again*/
 			layers[i]->deltaWeightSum->zero();

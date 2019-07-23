@@ -239,7 +239,7 @@ Matrix* Matrix::copy(Matrix* toCopy) {
 	return matrix;
 }
 
-void Matrix::moveData(Matrix* from, Matrix* to) {
+void Matrix::moveData(Matrix* to, Matrix* from) {
 	if (from->rows != to->rows || from->cols != to->cols) {
 		std::cout << "Can't move data because the rows and columns don't match up";
 		return;
