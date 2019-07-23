@@ -21,8 +21,8 @@ class Matrix {
 		Matrix* subtract(Matrix* m);
 		Matrix* zero();
 
-		double* apply(Activation func);
-		double* to1d() const;
+		double* apply(Activation func, double* to, size_t neuronArraySize);
+		double* to1d(double* arr, size_t length) const;
 		double averageValue() const;
 
 		static Matrix* hadamard(Matrix* m1, Matrix* m2);

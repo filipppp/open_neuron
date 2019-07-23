@@ -1,7 +1,4 @@
-﻿// main.cpp: Definiert den Einstiegspunkt für die Anwendung.
-//
-
-#include "main.h"
+﻿#include "main.h"
 #include <core/network.h>
 #include <core/layer.h>
 #include <chrono>
@@ -15,7 +12,7 @@ int main() {
 
 	auto executionTime = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
 	std::cout << executionTime;
-	std::cin.get();
+	//std::cin.get();
 	return 0;
 }
 
@@ -53,7 +50,7 @@ void nnTest() {
 	inputs[3][1] =	1;
 	outputs[3][0] = 0;
 
-	net->train(inputs, outputs, 4, 20000, 32, true);
+	net->train(inputs, outputs, 4, 10000000, 32, false);
 
 	double input1[2] = { 0, 0 };
 	double input2[2] = { 0, 1.0 };

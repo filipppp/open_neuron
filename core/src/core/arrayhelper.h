@@ -9,7 +9,7 @@ public:
 	static double* getArray(size_t rows, size_t cols, bool zero = false);
 
 	static double* getZero1D(size_t length);
-	static double* subtractArrays(const double* arr1, const double* arr2, size_t size);
+	static double* subtractArrays(const double* arr1, const double* arr2, size_t size, double* memory);
 	static double* hadamardArray(double* x, double* x2, size_t size);
 
 	static void zero(double* arr, size_t length);

@@ -45,11 +45,9 @@ double* Network::predict(double* inputs, size_t length) const {
 		 * 2. add() bias to calclulated neurons
 		 * 3. apply() Activation Function to squeeze numbers to specific regions
 		 */
-		delete[] layers[i]->neurons;
 		Matrix* unmappedMatrix = Matrix::multiply(layers[i]->weights, layers[i - 1]->neurons, layers[i - 1]->nodeCount)
 			->add(layers[i]->biases, layers[i]->nodeCount);
-		layers[i]->neurons = unmappedMatrix->apply(layers[i]->func);
-
+		unmappedMatrix->apply(layers[i]->func, layers[i]->neurons, layers[i]->nodeCount);
 		delete unmappedMatrix;
 	}
 
@@ -58,18 +56,18 @@ double* Network::predict(double* inputs, size_t length) const {
 }
 
 void Network::train(double** inputs, double** outputs, size_t trainingSize, size_t epochs, size_t batchSize, bool verbose) {
+	double** errorMatrices = new double*[layerCount];
+	for (size_t i = 0; i < layerCount; i++) {
+		errorMatrices[i] = new double[layers[i]->nodeCount];
+	}
 
 	for (size_t epochCount = 0; epochCount < epochs; epochCount++) {
 		ArrayHelper::shuffleTrainingData(inputs, outputs, trainingSize);
 
-
 		for (size_t trainingCount = 0; trainingCount < trainingSize; trainingCount++) {
 			/* Calculate Error which Network gives for specific input */
 			double* predictedOutput = predict(inputs[trainingCount], layers[0]->nodeCount);
-			double* outputError = ArrayHelper::subtractArrays(predictedOutput, outputs[trainingCount], layers[layerCount-1]->nodeCount);
-
-			double** errorMatrices = new double* [layerCount];
-			errorMatrices[layerCount - 1] = outputError;
+			double* outputError = ArrayHelper::subtractArrays(predictedOutput, outputs[trainingCount], layers[layerCount-1]->nodeCount, errorMatrices[layerCount - 1]);
 
 			/* Iterating through layers from behind */
 			for (size_t i = layerCount - 1; i > 0; i--) {
@@ -94,7 +92,7 @@ void Network::train(double** inputs, double** outputs, size_t trainingSize, size
 				/* Calculate error output for previous layer for further calculation */
 				Matrix* weightsTransposed = Matrix::transpose(layers[i]->weights);
 				Matrix* errorMatrix = Matrix::multiply(weightsTransposed, errorMatrices[i], layers[i]->nodeCount);
-				errorMatrices[i - 1] = errorMatrix->to1d();
+				errorMatrix->to1d(errorMatrices[i - 1], layers[i - 1]->nodeCount);
 
 				delete weightsTransposed;
 				delete errorMatrix;
@@ -114,14 +112,13 @@ void Network::train(double** inputs, double** outputs, size_t trainingSize, size
 					std::cout << "Batch Error: " << average / layers[layerCount - 1]->nodeCount << std::endl;
 				}
 			}
-
-			/* Clear Error Matrices */
-			for (size_t i = 0; i < layerCount; i++) {
-				delete[] errorMatrices[i];
-			}
-			delete[] errorMatrices;
 		}
 	}
+				/* Clear Error Matrices */
+	for (size_t i = 0; i < layerCount; i++) {
+		delete[] errorMatrices[i];
+	}
+	delete[] errorMatrices;
 }
 
 void Network::applyMiniBatch() {

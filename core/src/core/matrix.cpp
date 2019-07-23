@@ -54,7 +54,7 @@ Matrix* Matrix::add(Matrix* input) {
 
 Matrix* Matrix::add(double* input, size_t length) {
 	if (length != rows || cols != 1) {
-		std::cout << "Rows and cols don't match";
+		std::cout << "Rows and cols don't match" << std::endl;
 		return nullptr;
 	}
 
@@ -64,31 +64,30 @@ Matrix* Matrix::add(double* input, size_t length) {
 	return this;
 }
 
-double* Matrix::apply(Activation func) {
+double* Matrix::apply(Activation func, double* to, size_t neuronArraySize) {
 	if (cols != 1) { 
-		std::cout << "Apply function only works on single Column Matrices";
+		std::cout << "Apply function only works on single Column Matrices" << std::endl;
 		return nullptr; 
 	}
 
-	double* oneDimArray = to1d();
-	ArrayHelper::mapTo(oneDimArray, rows, func);
-	return oneDimArray;
+	to1d(to, neuronArraySize);
+	ArrayHelper::mapTo(to, rows, func);
 }
 
-double* Matrix::to1d() const {
-	if (cols != 1) { return nullptr; }
-
-	double* output = new double[rows];
-	for (size_t i = 0; i < rows; i++) {
-		output[i] = data[i * cols];
+double* Matrix::to1d(double* arr, size_t length) const {
+	if (cols != 1) {
+		std::cout << "Can't convert 2D Array to 1D" << std::endl;
+		return nullptr;
 	}
 
-	return output;
+	for (size_t i = 0; i < length; i++) {
+		arr[i] = data[i * cols];
+	}
 }
 
 Matrix* Matrix::multiply(Matrix* m1, Matrix* m2) {
 	if (m1->rows != m2->cols) {
-		std::cout << "Parameter 1 ROWS don't match Parameter 2 COLS";
+		std::cout << "Parameter 1 ROWS don't match Parameter 2 COLS" << std::endl;
 		return nullptr;
 	}
 
@@ -107,7 +106,7 @@ Matrix* Matrix::multiply(Matrix* m1, Matrix* m2) {
 
 Matrix* Matrix::multiply(Matrix* m1, const double* singleMatrix, size_t singleMatrixLength) {
 	if (m1->cols != singleMatrixLength) {
-		std::cout << "Cols don't match rows";
+		std::cout << "Cols don't match rows" << std::endl;
 		return nullptr;
 	}
 
@@ -126,7 +125,7 @@ Matrix* Matrix::multiply(Matrix* m1, const double* singleMatrix, size_t singleMa
 
 Matrix* Matrix::multiply(double* x1, size_t x1Length, double* x2, size_t x2Length) {
 	if (1 != 1) {
-		std::cout << "Cols don't match rows";
+		std::cout << "Cols don't match rows" << std::endl;
 		return nullptr;
 	}
 
@@ -159,7 +158,7 @@ Matrix* Matrix::divide(double quotient) {
 
 Matrix* Matrix::subtract(Matrix* m) {
 	if (rows != m->rows || cols != m->cols) {
-		std::cout << "Rows and Columns of both matrices don't match";
+		std::cout << "Rows and Columns of both matrices don't match" << std::endl;
 		return nullptr;
 	}
 
@@ -197,7 +196,7 @@ Matrix* Matrix::print() {
 
 Matrix* Matrix::hadamard(Matrix* m1, Matrix* m2) {
 	if (m1->rows != m2->rows || m1->cols != m2->cols) {
-		std::cout << "Rows and Columns of both matrices don't match";
+		std::cout << "Rows and Columns of both matrices don't match" << std::endl;
 		return nullptr;
 	}
 
@@ -210,7 +209,7 @@ Matrix* Matrix::hadamard(Matrix* m1, Matrix* m2) {
 
 Matrix* Matrix::subtract(Matrix* m1, Matrix* m2) {
 	if (m1->rows != m2->rows || m1->cols != m2->cols) {
-		std::cout << "Rows and Columns of both matrices don't match";
+		std::cout << "Rows and Columns of both matrices don't match" << std::endl;
 		return nullptr;
 	}
 
@@ -241,7 +240,7 @@ Matrix* Matrix::copy(Matrix* toCopy) {
 
 void Matrix::moveData(Matrix* to, Matrix* from) {
 	if (from->rows != to->rows || from->cols != to->cols) {
-		std::cout << "Can't move data because the rows and columns don't match up";
+		std::cout << "Can't move data because the rows and columns don't match up" << std::endl;
 		return;
 	}
 

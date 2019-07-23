@@ -21,12 +21,10 @@ double* ArrayHelper::getZero1D(size_t length) {
 	return arr;
 }
 
-double* ArrayHelper::subtractArrays(const double* arr1, const double* arr2, size_t size) {
-	double* result = new double[size];
+double* ArrayHelper::subtractArrays(const double* arr1, const double* arr2, size_t size, double* memory) {
 	for (size_t i = 0; i < size; ++i) {
-		result[i] = arr1[i] - arr2[i];
+		memory[i] = arr1[i] - arr2[i];
 	}
-	return result;
 }
 
 void ArrayHelper::mapTo(double* arr, size_t size, Activation func, bool derivative) {
